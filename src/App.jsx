@@ -4,22 +4,16 @@ import {
   MapPin, 
   Train, 
   Clock, 
-  Info, 
   Utensils, 
   Camera, 
   Ticket, 
   Bus, 
   Plane, 
-  ShoppingBag,
-  Wallet,
   Sun,
   Navigation,
   Landmark,
-  Scroll,
   Feather,
-  Compass,
   Map as MapIcon,
-  ChevronRight,
   X,
   BookOpen,
   History,
@@ -27,7 +21,7 @@ import {
   Sparkles
 } from 'lucide-react';
 
-// --- 資料來源：擴充了 details 欄位 (導遊資訊) ---
+// --- 資料來源 ---
 const TRIP_DATA = {
   title: "Grand Tour of Italia",
   subtitle: "XV Days Journey",
@@ -335,15 +329,6 @@ const TRIP_DATA = {
   ]
 };
 
-const TICKETS = [
-  { type: "train", from: "Milan", to: "Florence", time: "12/24 15:40", code: "Frecciarossa", platform: "TBD" },
-  { type: "train", from: "Florence", to: "Venice", time: "12/25 08:39", code: "Italo", platform: "TBD" },
-  { type: "train", from: "Florence", to: "Rome", time: "12/28 09:48", code: "FR 9405", platform: "TBD" },
-  { type: "entry", title: "St. Peter's Basilica", time: "12/30 12:00", code: "84068", sub: "Dome Entry" },
-  { type: "entry", title: "Vatican Museums", time: "12/30 15:00", code: "21333DD...", sub: "Sistine Chapel" },
-  { type: "entry", title: "Colosseum", time: "12/31 09:00", code: "需搶票", sub: "Full Experience" },
-];
-
 // --- 景點解說彈窗組件 (Guide Modal) ---
 const GuideModal = ({ attraction, onClose }) => {
   if (!attraction || !attraction.details) return null;
@@ -476,38 +461,36 @@ const App = () => {
         </div>
 
         {/* Date Selector */}
-        {(activeTab === 'itinerary' || activeTab === 'map') && (
-          <div className="mt-6 -mx-6 px-6">
-            <div 
-              ref={scrollRef}
-              className="flex overflow-x-auto gap-3 pb-4 snap-x no-scrollbar"
-            >
-              {TRIP_DATA.days.map((day) => {
-                const isActive = activeDayId === day.id;
-                return (
-                  <button
-                    key={day.id}
-                    onClick={() => setActiveDayId(day.id)}
-                    className={`flex-shrink-0 snap-center w-[4.5rem] h-20 rounded-xl flex flex-col items-center justify-center transition-all duration-300 border-2
-                      ${isActive 
-                        ? 'bg-[#A0522D] border-[#A0522D] text-[#FDFBF7] shadow-lg transform scale-105' 
-                        : 'bg-white border-[#E5E0D8] text-[#8C7B70] hover:border-[#C0B2A6]'
-                      }
-                    `}
-                  >
-                    <span className={`text-[10px] uppercase font-bold tracking-wider ${isActive ? 'text-[#E6D0B3]' : 'text-[#A89F91]'}`}>
-                      {day.dayName}
-                    </span>
-                    <span className={`text-xl font-serif font-bold ${isActive ? 'text-white' : 'text-[#5D4037]'}`}>
-                      {day.date.split('/')[1]}
-                    </span>
-                    <span className="text-[9px] mt-1 opacity-80">Day {day.id}</span>
-                  </button>
-                );
-              })}
-            </div>
+        <div className="mt-6 -mx-6 px-6">
+          <div 
+            ref={scrollRef}
+            className="flex overflow-x-auto gap-3 pb-4 snap-x no-scrollbar"
+          >
+            {TRIP_DATA.days.map((day) => {
+              const isActive = activeDayId === day.id;
+              return (
+                <button
+                  key={day.id}
+                  onClick={() => setActiveDayId(day.id)}
+                  className={`flex-shrink-0 snap-center w-[4.5rem] h-20 rounded-xl flex flex-col items-center justify-center transition-all duration-300 border-2
+                    ${isActive 
+                      ? 'bg-[#A0522D] border-[#A0522D] text-[#FDFBF7] shadow-lg transform scale-105' 
+                      : 'bg-white border-[#E5E0D8] text-[#8C7B70] hover:border-[#C0B2A6]'
+                    }
+                  `}
+                >
+                  <span className={`text-[10px] uppercase font-bold tracking-wider ${isActive ? 'text-[#E6D0B3]' : 'text-[#A89F91]'}`}>
+                    {day.dayName}
+                  </span>
+                  <span className={`text-xl font-serif font-bold ${isActive ? 'text-white' : 'text-[#5D4037]'}`}>
+                    {day.date.split('/')[1]}
+                  </span>
+                  <span className="text-[9px] mt-1 opacity-80">Day {day.id}</span>
+                </button>
+              );
+            })}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Main Content */}
@@ -673,37 +656,6 @@ const App = () => {
             </div>
           </div>
         )}
-
-        {/* --- WALLET TAB --- */}
-        {activeTab === 'wallet' && (
-          <div className="px-5 pt-6 space-y-6">
-            <h2 className="text-xl font-serif font-bold text-[#4A4036] mb-4 flex items-center gap-2">
-              <Scroll className="text-[#8B5E3C]" />
-              通行證與票券
-            </h2>
-            {TICKETS.map((ticket, index) => (
-              <div key={index} className="relative bg-[#Fdfbf7] border-2 border-[#D2B48C] rounded-lg p-5 shadow-sm overflow-hidden">
-                <div className="flex justify-between items-start relative z-10">
-                  <div>
-                    <div className="text-xs font-bold uppercase tracking-widest text-[#8B5E3C] mb-1">
-                      {ticket.type}
-                    </div>
-                    <h3 className="text-lg font-bold text-[#4A4036] mb-1">
-                      {ticket.title || `${ticket.from} ➝ ${ticket.to}`}
-                    </h3>
-                    <div className="text-sm text-[#6D5D50]">{ticket.time}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="bg-[#EAE4DC] px-3 py-2 rounded border border-[#D7CDC1]">
-                      <div className="text-[10px] text-[#8C7B70] uppercase">Booking Ref</div>
-                      <div className="font-mono font-bold text-[#4A4036]">{ticket.code}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* 彈窗渲染 */}
@@ -714,30 +666,23 @@ const App = () => {
 
       {/* Bottom Navigation */}
       <div className="bg-[#3E3228] pb-6 pt-3 px-6 fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40 rounded-t-2xl shadow-[0_-5px_15px_rgba(0,0,0,0.1)]">
-        <div className="flex justify-between items-center text-[#A89F91]">
+        <div className="flex justify-around items-center text-[#A89F91]">
           <button 
             onClick={() => setActiveTab('itinerary')}
-            className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'itinerary' ? 'text-[#D2B48C]' : 'hover:text-[#C0B2A6]'}`}
+            className={`flex flex-col items-center gap-1 transition-colors px-6 ${activeTab === 'itinerary' ? 'text-[#D2B48C]' : 'hover:text-[#C0B2A6]'}`}
           >
-            <Calendar size={22} strokeWidth={activeTab === 'itinerary' ? 2.5 : 2} />
-            <span className="text-[10px] uppercase tracking-wider">Journey</span>
+            <Calendar size={24} strokeWidth={activeTab === 'itinerary' ? 2.5 : 2} />
+            <span className="text-[10px] uppercase tracking-wider font-bold">行程 Journey</span>
           </button>
           
-          <div className="relative -top-6">
-            <button 
-              onClick={() => setActiveTab('map')}
-              className={`bg-[#DAA520] text-[#3E3228] p-4 rounded-full shadow-lg active:scale-95 transition-transform border-4 border-[#3E3228] ${activeTab === 'map' ? 'ring-2 ring-[#DAA520] ring-offset-2 ring-offset-[#3E3228]' : ''}`}
-            >
-              <MapIcon size={24} fill="currentColor" />
-            </button>
-          </div>
+          <div className="w-[1px] h-8 bg-[#5D4037]"></div>
           
           <button 
-            onClick={() => setActiveTab('wallet')}
-            className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'wallet' ? 'text-[#D2B48C]' : 'hover:text-[#C0B2A6]'}`}
+            onClick={() => setActiveTab('map')}
+            className={`flex flex-col items-center gap-1 transition-colors px-6 ${activeTab === 'map' ? 'text-[#D2B48C]' : 'hover:text-[#C0B2A6]'}`}
           >
-            <Wallet size={22} strokeWidth={activeTab === 'wallet' ? 2.5 : 2} />
-            <span className="text-[10px] uppercase tracking-wider">Tickets</span>
+            <MapIcon size={24} strokeWidth={activeTab === 'map' ? 2.5 : 2} />
+            <span className="text-[10px] uppercase tracking-wider font-bold">地圖 Map</span>
           </button>
         </div>
       </div>
